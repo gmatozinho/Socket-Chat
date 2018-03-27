@@ -46,7 +46,6 @@ int main(int argc, char *argv[])
         printf("Here is the message: %s",buffer);
         if(memcmp(buffer,"bye",strlen("bye")) ==0)
         {
-            printf("Falou");
             return 0;
         }
         printf("Please enter the message: ");
