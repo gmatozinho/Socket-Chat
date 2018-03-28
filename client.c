@@ -50,6 +50,8 @@ int main(int argc, char *argv[])
 
         if(memcmp(buffer,"bye",strlen("bye")) == 0)
         {
+            close(newsockfd1);
+            close(newsockfd2);
             return 0;
         }
         bzero(buffer,256);
@@ -59,8 +61,9 @@ int main(int argc, char *argv[])
         printf("Here is the message: %s",buffer);
         if(memcmp(buffer,"bye",strlen("bye")) == 0)
         {
+            close(newsockfd1);
+            close(newsockfd2);
             return 0;
         }
-        //return 0;
     }
 }
