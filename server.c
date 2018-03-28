@@ -104,14 +104,16 @@ int main(int argc, char *argv[])
         // if(newsockfd2 < 0)
         //     error("ERRO on accept");
 
-        while (1)
-    {
+    while (1){
         bzero(buffer,256);
         n = read(newsockfd1,buffer,255);
         if (n < 0) error("ERROR reading from socket");
         // printf("Here is the message: %s",buffer);
         if(memcmp(buffer,"bye",strlen("bye")) ==0)
         {
+
+            close(newsockfd1);
+            //close(newsockfd2);
             return 0;
         }
         //printf("Please enter the message: ");
@@ -122,8 +124,9 @@ int main(int argc, char *argv[])
                 error("ERROR writing to socket");
         if(memcmp(buffer,"bye",strlen("bye")) == 0)
         {
-            close(newsockfd1);
+
             close(newsockfd2);
+            //close(newsockfd2);
             return 0;
         }
         
@@ -133,7 +136,8 @@ int main(int argc, char *argv[])
         // printf("Here is the message: %s",buffer);
         if(memcmp(buffer,"bye",strlen("bye")) ==0)
         {
-            close(newsockfd1);
+
+            //close(newsockfd2);
             close(newsockfd2);
             return 0;
         }
@@ -145,6 +149,8 @@ int main(int argc, char *argv[])
                 error("ERROR writing to socket");
         if(memcmp(buffer,"bye",strlen("bye")) == 0)
         {
+            close(newsockfd1);
+            //close(newsockfd2);
             return 0;
         }
         //return 0; 
