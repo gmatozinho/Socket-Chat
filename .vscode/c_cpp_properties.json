@@ -49,7 +49,9 @@
                 "C:/Users/gusta/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/local/include",
                 "${workspaceRoot}",
                 "C:/Users/gusta/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/x86_64-linux-gnu",
-                "C:/Users/gusta/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/linux"
+                "C:/Users/gusta/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/linux",
+                "C:/Users/gusta/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/c++/5/tr1",
+                "C:/Users/gusta/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/c++/5"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -157,8 +159,7 @@
             }
         },
         {
-            "configurations": [
-                {
+            
                     "name": "Win32",
                     "intelliSenseMode": "clang-x64",
                     "includePath": [
@@ -185,10 +186,9 @@
                         "limitSymbolsToIncludedHeaders": true,
                         "databaseFilename": ""
                     }
-                }
-            ],
-            "intelliSenseMode": "msvc-x64"
+                
         }
     ],
+    "intelliSenseMode": "msvc-x64",
     "version": 3
 }
