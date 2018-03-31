@@ -32,7 +32,7 @@ int serverAssignSocket()
 }
 
 void serverBind(int sockfd, int portno)
-{
+{ 
     struct sockaddr_in serv_addr;
 
     bzero((char *)&serv_addr, sizeof(serv_addr));    
@@ -61,6 +61,36 @@ int serverAccept(int sockfd)
     return newsockfd;
 }
 
+void serverRead(int newsockfd,char buffer[])
+{
+    int n;
+
+    bzero(buffer,256);
+    n = read(newsockfd,buffer,255);
+    if (n < 0) error("ERROR reading from socket");
+    if(memcmp(buffer,"bye",strlen("bye")) ==0)
+    {
+
+        close(newsockfd);
+        return 0;
+    }
+}
+
+void serverWrite(int newsockfd,char buffer[])
+{
+    int n;
+    n = write(newsockfd,buffer,strlen(buffer));
+    if (n < 0) 
+            error("ERROR writing to socket");
+    if(memcmp(buffer,"bye",strlen("bye")) == 0)
+    {
+
+        close(newsockfd);
+        return 0;
+    }
+
+}
+
 int main(int argc, char *argv[])
 {
     int sockfd, newsockfd1,newsockfd2, portno;
@@ -77,41 +107,10 @@ int main(int argc, char *argv[])
     newsockfd2 = serverAccept(sockfd);
 
     while (1){
-        bzero(buffer,256);
-        n = read(newsockfd1,buffer,255);
-        if (n < 0) error("ERROR reading from socket");
-        if(memcmp(buffer,"bye",strlen("bye")) ==0)
-        {
+        serverRead(newsockfd1,buffer);
+        serverWrite(newsockfd2,buffer);
 
-            close(newsockfd1);
-            return 0;
-        }
-        n = write(newsockfd2,buffer,strlen(buffer));
-        if (n < 0) 
-                error("ERROR writing to socket");
-        if(memcmp(buffer,"bye",strlen("bye")) == 0)
-        {
-
-            close(newsockfd2);
-            return 0;
-        }
-        
-        bzero(buffer,256);
-        n = read(newsockfd2,buffer,255);
-        if (n < 0) error("ERROR reading from socket");
-        if(memcmp(buffer,"bye",strlen("bye")) ==0)
-        {
-
-            close(newsockfd2);
-            return 0;
-        }
-        n = write(newsockfd1,buffer,strlen(buffer));
-        if (n < 0) 
-                error("ERROR writing to socket");
-        if(memcmp(buffer,"bye",strlen("bye")) == 0)
-        {
-            close(newsockfd1);
-            return 0;
-        }
+        serverRead(newsockfd2,buffer);
+        serverWrite(newsockfd1,buffer);
     }
 }
