@@ -47,7 +47,9 @@
             "includePath": [
                 "C:/Users/gusta/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include",
                 "C:/Users/gusta/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/local/include",
-                "${workspaceRoot}"
+                "${workspaceRoot}",
+                "C:/Users/gusta/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/x86_64-linux-gnu",
+                "C:/Users/gusta/AppData/Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/linux"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -59,7 +61,9 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
             "name": "Win32",
@@ -87,6 +91,103 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
             }
+        },
+        {
+            "name": "WSL",
+            "intelliSenseMode": "clang-x64",
+            "includePath": [
+                "${workspaceRoot}",
+                "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/c++/5",
+                "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/x86_64-linux-gnu/c++/5",
+                "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/c++/5/backward",
+                "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/lib/gcc/x86_64-linux-gnu/5/include",
+                "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/local/include",
+                "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed",
+                "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/x86_64-linux-gnu",
+                "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include"
+            ],
+            "defines": [
+                "__linux__",
+                "__x86_64__"
+            ],
+            "browse": {
+                "path": [
+                    "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/c++/5",
+                    "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/x86_64-linux-gnu/c++/5",
+                    "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/lib/gcc/x86_64-linux-gnu/5/include",
+                    "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/local/include",
+                    "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed",
+                    "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/x86_64-linux-gnu",
+                    "C:\\Users\\gusta\\AppData\\Local/Packages/CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc/LocalState/rootfs/usr/include/*"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        },
+        {
+            "name": "WSL (Beta)",
+            "intelliSenseMode": "clang-x64",
+            "includePath": [
+                "${workspaceRoot}",
+                "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/include/c++/5",
+                "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/include/x86_64-linux-gnu/c++/5",
+                "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/include/c++/5/backward",
+                "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/lib/gcc/x86_64-linux-gnu/5/include",
+                "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/local/include",
+                "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed",
+                "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/include/x86_64-linux-gnu",
+                "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/include"
+            ],
+            "defines": [
+                "__linux__",
+                "__x86_64__"
+            ],
+            "browse": {
+                "path": [
+                    "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/include/c++/5",
+                    "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/include/x86_64-linux-gnu/c++/5",
+                    "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/lib/gcc/x86_64-linux-gnu/5/include",
+                    "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/local/include",
+                    "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed",
+                    "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/include/x86_64-linux-gnu",
+                    "C:\\Users\\gusta\\AppData\\Local/lxss/rootfs/usr/include/*"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        },
+        {
+            "configurations": [
+                {
+                    "name": "Win32",
+                    "intelliSenseMode": "clang-x64",
+                    "includePath": [
+                        "${workspaceRoot}",
+                        "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++",
+                        "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32",
+                        "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/backward",
+                        "C:/MinGW/lib/gcc/mingw32/6.3.0/include",
+                        "C:/MinGW/include",
+                        "C:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed"
+                    ],
+                    "defines": [
+                        "_DEBUG",
+                        "UNICODE",
+                        "__GNUC__=6",
+                        "__cdecl=__attribute__((__cdecl__))"
+                    ],
+                    "browse": {
+                        "path": [
+                            "C:/MinGW/lib/gcc/mingw32/6.3.0/include",
+                            "C:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed",
+                            "C:/MinGW/include/*"
+                        ],
+                        "limitSymbolsToIncludedHeaders": true,
+                        "databaseFilename": ""
+                    }
+                }
+            ],
+            "intelliSenseMode": "msvc-x64"
         }
     ],
     "version": 3
