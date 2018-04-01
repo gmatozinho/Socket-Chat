@@ -6,6 +6,8 @@ chat :
 	gcc -o server server.c -lpthread
 
 
-clean :
+cleanServer :
 	rm server *.o
+
+cleanClient :
 	rm client *.o
