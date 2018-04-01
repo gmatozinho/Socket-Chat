@@ -4,6 +4,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h> 
+#include <stdlib.h>
+#include <unistd.h>
+#include <pthread.h>
+
+pthread_t listener, writer;
 
 void error(char *msg)
 {
@@ -80,6 +85,42 @@ void clientRead(int sockfd,char buffer[])
     }
 }
 
+void *ouvinte(void *socket){
+    char buffer[256];
+    int sockfd, n;
+    
+    sockfd = *(int *)socket;
+    bzero(buffer,256);
+    
+    while (1) {
+        bzero(buffer,256);
+        n = read(sockfd,buffer,255);
+        if (n < 0) error("ERROR reading from socket");
+        printf("Message received: %s\n",buffer);
+    }
+    
+    pthread_cancel(writer);
+    return NULL;
+}
+
+void *escritor(void *socket){
+    char buffer[256];
+    int sockfd, n;
+    
+    sockfd = *(int *)socket;
+    bzero(buffer,256);
+    
+    while (strcmp(buffer, "bye\n") != 0) {
+        bzero(buffer,256);
+        fgets(buffer,255,stdin);
+        n = write(sockfd,buffer, strlen(buffer)-1);
+        if (n < 0) error("ERROR reading from socket");
+    }
+    
+    pthread_cancel(listener);
+    return NULL;
+}
+
 int main(int argc, char *argv[])
 {
     int sockfd, portno, n;
@@ -91,8 +132,19 @@ int main(int argc, char *argv[])
     sockfd = clientAssignSocket();
     clientConnectToServer(argv,portno,sockfd);
 
-    while(1){
+    pthread_create(&listener, NULL, ouvinte, &sockfd);
+    pthread_create(&writer, NULL, escritor, &sockfd);
+    
+    pthread_join(listener, NULL);
+    pthread_join(writer, NULL);
+    
+    close(sockfd);
+   
+    return 0;
+
+
+    /* while(1){
         clientWrite(sockfd,buffer);
         clientRead(sockfd,buffer);        
-    }
+    } */
 }
