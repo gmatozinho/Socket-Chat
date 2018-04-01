@@ -58,63 +58,45 @@ void clientConnectToServer(char **argv, int portno, int sockfd)
 void clientWrite(int sockfd,char buffer[])
 {
     int n;
-    printf("Please enter the message: ");
+    //printf("Please enter the message: ");
     bzero(buffer,256);
     fgets(buffer,255,stdin);
-    n = write(sockfd,buffer,strlen(buffer));
-    if (n < 0) 
-            error("ERROR writing to socket");
-
-    if(memcmp(buffer,"bye",strlen("bye")) == 0)
-    {
-        return 0;
-    }
+    n = write(sockfd,buffer, strlen(buffer)-1);
+    if (n < 0) error("ERROR reading from socket");    
 }
 
 void clientRead(int sockfd,char buffer[])
 {
-    int n;
+    int n;    
     bzero(buffer,256);
     n = read(sockfd,buffer,255);
-    if (n < 0) 
-            error("ERROR reading from socket");
-    printf("Here is the message: %s",buffer);
-    if(memcmp(buffer,"bye",strlen("bye")) == 0)
-    {
-        return 0;
-    }
+    if (n < 0) error("ERROR reading from socket");
+    printf("Message received: %s\n",buffer);
 }
 
-void *ouvinte(void *socket){
+void *clientListener(void *socket){
     char buffer[256];
     int sockfd, n;
     
     sockfd = *(int *)socket;
-    bzero(buffer,256);
-    
+    bzero(buffer,256);    
     while (1) {
-        bzero(buffer,256);
-        n = read(sockfd,buffer,255);
-        if (n < 0) error("ERROR reading from socket");
-        printf("Message received: %s\n",buffer);
+        clientRead(sockfd,buffer);
     }
     
     pthread_cancel(writer);
     return NULL;
 }
 
-void *escritor(void *socket){
+void *clientWriter(void *socket){
     char buffer[256];
     int sockfd, n;
     
     sockfd = *(int *)socket;
     bzero(buffer,256);
     
-    while (strcmp(buffer, "bye\n") != 0) {
-        bzero(buffer,256);
-        fgets(buffer,255,stdin);
-        n = write(sockfd,buffer, strlen(buffer)-1);
-        if (n < 0) error("ERROR reading from socket");
+    while (memcmp(buffer,"bye",strlen("bye")) != 0) {
+        clientWrite(sockfd,buffer);
     }
     
     pthread_cancel(listener);
@@ -132,8 +114,8 @@ int main(int argc, char *argv[])
     sockfd = clientAssignSocket();
     clientConnectToServer(argv,portno,sockfd);
 
-    pthread_create(&listener, NULL, ouvinte, &sockfd);
-    pthread_create(&writer, NULL, escritor, &sockfd);
+    pthread_create(&listener, NULL, clientListener, &sockfd);
+    pthread_create(&writer, NULL, clientWriter, &sockfd);
     
     pthread_join(listener, NULL);
     pthread_join(writer, NULL);
@@ -141,10 +123,4 @@ int main(int argc, char *argv[])
     close(sockfd);
    
     return 0;
-
-
-    /* while(1){
-        clientWrite(sockfd,buffer);
-        clientRead(sockfd,buffer);        
-    } */
 }
