@@ -1,13 +1,19 @@
 CC=gcc 
 CFLAGS=-Wall
 
-chat :
-	gcc -o client client.c -lpthread
+all:	server	client
+
+server:	server.c
 	gcc -o server server.c -lpthread
 
+client:	client.c
+	gcc -o client client.c -lpthread
+
+clean:	cleanServer	cleanClient 
 
 cleanServer :
-	rm server *.o
+	rm -f server
 
 cleanClient :
-	rm client *.o
+	rm -f client
+
