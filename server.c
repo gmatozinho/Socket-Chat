@@ -8,12 +8,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <signal.h>
 
 int* sockets;
 pthread_t main_thread;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 int t_count = 0;
 pthread_t* threads;
+int thisSocket;
 
 void error(char *msg)
 {
@@ -87,6 +89,19 @@ void serverRead(int sockfd,char buffer[])
     printf("%d sent: %s \n", sockfd, buffer);
 }
 
+void closeAll(int sinal)
+{   
+    int i;
+    char buffer[10];
+    strcpy(buffer,"bye");
+    serverSendBroadcast(buffer);
+    pthread_cancel(main_thread);
+    free(threads);
+	free(sockets);
+    close(thisSocket);
+    exit(sinal);
+}
+
 
 int findSocketToClose(int sockfd)
 {
@@ -96,6 +111,7 @@ int findSocketToClose(int sockfd)
     		return i;
     	}
     }
+    
 }
 
 void closeSocket(int position)
@@ -105,6 +121,29 @@ void closeSocket(int position)
     pthread_mutex_unlock(&mutex);
 }
 
+void nomesinal(int sinal, char* str)
+{
+	switch(sinal)
+	{
+		case 2:  
+            strcpy(str, "SIGINT");  
+            break;
+		case 15:  
+            strcpy(str, "SIGTERM"); 
+            break;
+	}
+}
+
+void tratasinal(int sinal)
+{
+	char nome[20];
+    char msg[10];
+	nomesinal(sinal, nome);    
+    if(sinal==2 || sinal == 15){
+	    printf("Sinal recebido: %d (%s)\n", sinal, nome);
+        closeAll(sinal);
+    }
+}
 
 void *serverListener(void *socket){
     char buffer[256];
@@ -113,8 +152,11 @@ void *serverListener(void *socket){
     
     sockfd = *(int *)socket;
     bzero(buffer,256);
+    
+    signal(2, tratasinal);
+	signal(15, tratasinal);
 
-    while (memcmp(buffer,"bye",strlen("bye")) != 0) {
+    while (memcmp(buffer,"bye",strlen("bye"))) {
         serverRead(sockfd, buffer);
     }
     
@@ -208,9 +250,10 @@ int main(int argc, char *argv[])
     mallocs();
     checkPort(argc);
     sockfd = serverAssignSocket();
+    thisSocket = sockfd;
     portno = atoi(argv[1]);
     serverBind(sockfd,portno);
-    startSocketVector();
+    startSocketVector();	
 
     pthread_create(&main_thread, NULL, getClients, &sockfd);	
 	pthread_join(main_thread, NULL);

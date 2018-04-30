@@ -7,9 +7,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <signal.h>
 
 pthread_t listener, writer;
-
+int serverSocket;
 void error(char *msg)
 {
     perror(msg);
@@ -58,7 +59,6 @@ void clientConnectToServer(char **argv, int portno, int sockfd)
 void clientWrite(int sockfd,char buffer[])
 {
     int n;
-    //printf("Please enter the message: ");
     bzero(buffer,256);
     fgets(buffer,255,stdin);
     n = write(sockfd,buffer, strlen(buffer)-1);
@@ -74,13 +74,42 @@ void clientRead(int sockfd,char buffer[])
     printf("Message received: %s\n",buffer);
 }
 
+void nomesinal(int sinal, char* str)
+{
+	switch(sinal)
+	{
+		case 2:  
+            strcpy(str, "SIGINT");  
+            break;
+		case 15:  
+            strcpy(str, "SIGTERM"); 
+            break;
+	}
+}
+
+void tratasinal(int sinal)
+{
+	char nome[20];
+    char msg[10];
+	nomesinal(sinal, nome);    
+    //clientWrite(serverSocket,nome);
+    if(sinal==2){
+	    printf("Sinal recebido: %d (%s)\n", sinal, nome);
+        strcpy(msg,"bye");
+        clientWrite(serverSocket,msg);
+        exit(sinal);
+    }
+}
+
 void *clientListener(void *socket){
     char buffer[256];
-    int sockfd, n;
-    
+    int sockfd, n;    
+
+    serverSocket = *(int *)socket;
     sockfd = *(int *)socket;
+    
     bzero(buffer,256);    
-    while (1) {
+    while (memcmp(buffer,"bye",strlen("bye")) != 0) {
         clientRead(sockfd,buffer);
     }
     
@@ -91,6 +120,9 @@ void *clientListener(void *socket){
 void *clientWriter(void *socket){
     char buffer[256];
     int sockfd, n;
+
+    signal(2, tratasinal);
+	signal(15, tratasinal);
     
     sockfd = *(int *)socket;
     bzero(buffer,256);
@@ -103,6 +135,8 @@ void *clientWriter(void *socket){
     return NULL;
 }
 
+
+
 int main(int argc, char *argv[])
 {
     int sockfd, portno, n;
@@ -112,7 +146,7 @@ int main(int argc, char *argv[])
     
     portno = atoi(argv[2]);
     sockfd = clientAssignSocket();
-    clientConnectToServer(argv,portno,sockfd);
+    clientConnectToServer(argv,portno,sockfd);    
 
     pthread_create(&listener, NULL, clientListener, &sockfd);
     pthread_create(&writer, NULL, clientWriter, &sockfd);
