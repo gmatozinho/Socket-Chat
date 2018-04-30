@@ -9,6 +9,8 @@
 #include <pthread.h>
 #include <signal.h>
 
+#define h_addr h_addr_list[0] /* for backward compatibility */
+
 pthread_t listener, writer;
 int serverSocket;
 void error(char *msg)
@@ -65,6 +67,17 @@ void clientWrite(int sockfd,char buffer[])
     if (n < 0) error("ERROR reading from socket");    
 }
 
+void clientRequireClose()
+{
+    int n;
+    n = write(serverSocket,"bye",3);
+    if (n < 0) error("ERROR reading from socket"); 
+    pthread_cancel(listener);
+    pthread_cancel(writer);
+    close(serverSocket);
+
+}
+
 void clientRead(int sockfd,char buffer[])
 {
     int n;    
@@ -89,15 +102,8 @@ void nomesinal(int sinal, char* str)
 
 void tratasinal(int sinal)
 {
-	char nome[20];
-    char msg[10];
-	nomesinal(sinal, nome);    
-    //clientWrite(serverSocket,nome);
-    if(sinal==2){
-	    printf("Sinal recebido: %d (%s)\n", sinal, nome);
-        strcpy(msg,"bye");
-        clientWrite(serverSocket,msg);
-        exit(sinal);
+	if(sinal==2 || sinal==15){
+        clientRequireClose();
     }
 }
 
@@ -105,7 +111,6 @@ void *clientListener(void *socket){
     char buffer[256];
     int sockfd, n;    
 
-    serverSocket = *(int *)socket;
     sockfd = *(int *)socket;
     
     bzero(buffer,256);    
@@ -146,6 +151,7 @@ int main(int argc, char *argv[])
     
     portno = atoi(argv[2]);
     sockfd = clientAssignSocket();
+    serverSocket = sockfd;
     clientConnectToServer(argv,portno,sockfd);    
 
     pthread_create(&listener, NULL, clientListener, &sockfd);

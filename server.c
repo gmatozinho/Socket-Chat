@@ -78,6 +78,31 @@ void serverSendBroadcast(char *buffer){
     }
 }
 
+void serverCloseBroadcast(char *buffer){
+    int i;
+    int sockfd;
+    
+    for (i = 0; i < t_count; i++){
+        sockfd = sockets[i];
+        
+		if (sockfd != -1){
+            printf("\nKilling client %d\n", sockfd);	
+            serverWrite(sockfd,buffer);
+		}        
+    }
+}
+
+void closeAll()
+{   
+    char buffer[10];
+    strcpy(buffer,"bye");
+    serverCloseBroadcast(buffer);
+    free(threads);
+	free(sockets);
+    pthread_cancel(main_thread);    
+    close(thisSocket);    
+}
+
 void serverRead(int sockfd,char buffer[])
 {
     int n;
@@ -88,20 +113,6 @@ void serverRead(int sockfd,char buffer[])
     serverSendBroadcast(buffer);
     printf("%d sent: %s \n", sockfd, buffer);
 }
-
-void closeAll(int sinal)
-{   
-    int i;
-    char buffer[10];
-    strcpy(buffer,"bye");
-    serverSendBroadcast(buffer);
-    pthread_cancel(main_thread);
-    free(threads);
-	free(sockets);
-    close(thisSocket);
-    exit(sinal);
-}
-
 
 int findSocketToClose(int sockfd)
 {
@@ -125,7 +136,7 @@ void nomesinal(int sinal, char* str)
 {
 	switch(sinal)
 	{
-		case 2:  
+      	case 2:  
             strcpy(str, "SIGINT");  
             break;
 		case 15:  
@@ -135,13 +146,9 @@ void nomesinal(int sinal, char* str)
 }
 
 void tratasinal(int sinal)
-{
-	char nome[20];
-    char msg[10];
-	nomesinal(sinal, nome);    
+{ 
     if(sinal==2 || sinal == 15){
-	    printf("Sinal recebido: %d (%s)\n", sinal, nome);
-        closeAll(sinal);
+        closeAll();
     }
 }
 
@@ -156,8 +163,8 @@ void *serverListener(void *socket){
     signal(2, tratasinal);
 	signal(15, tratasinal);
 
-    while (memcmp(buffer,"bye",strlen("bye"))) {
-        serverRead(sockfd, buffer);
+    while (memcmp(buffer,"bye",strlen("bye"))) {        
+        serverRead(sockfd, buffer);        
     }
     
     position = findSocketToClose(sockfd);
