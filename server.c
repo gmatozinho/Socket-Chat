@@ -132,7 +132,6 @@ void serverRead(int sockfd,char buffer[])
         strcat(newBuffer, buffer);
         serverSendBroadcast(newBuffer);
     }
-    /* printf("%d sent: %s \n", sockfd, buffer); */
 }
 
 int findSocketToClose(int sockfd)

@@ -84,7 +84,6 @@ void clientRead(int sockfd,char buffer[])
     bzero(buffer,256);
     n = read(sockfd,buffer,255);
     if (n < 0) error("ERROR reading from socket");
-    /* printf("Message received: %s\n",buffer); */
     printf("%s\n",buffer);
 }
 
