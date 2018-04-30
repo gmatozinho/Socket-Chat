@@ -13,6 +13,7 @@
 
 pthread_t listener, writer;
 int serverSocket;
+
 void error(char *msg)
 {
     perror(msg);
