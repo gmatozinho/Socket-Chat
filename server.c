@@ -67,14 +67,14 @@ void serverWrite(int sockfd,char buffer[])
 
 }
 
-void serverSendBroadcast(char *buffer){
+void serverSendBroadcast(char *buffer, int readsocket){
     int i;
     int sockfd;
     
     for (i = 0; i < t_count; i++){
         sockfd = sockets[i];
         
-		if (sockfd != -1){
+		if (sockfd != -1 && sockfd != readsocket){
             serverWrite(sockfd,buffer);
 		}
     }
@@ -130,7 +130,7 @@ void serverRead(int sockfd,char buffer[])
         strcpy(newBuffer, str);
         strcat(newBuffer," sent: ");
         strcat(newBuffer, buffer);
-        serverSendBroadcast(newBuffer);
+        serverSendBroadcast(newBuffer, sockfd);
     }
 }
 
