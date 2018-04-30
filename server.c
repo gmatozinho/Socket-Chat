@@ -10,6 +10,8 @@
 #include <pthread.h>
 #include <signal.h>
 
+const double SIZE = 5;
+
 int* sockets;
 pthread_t main_thread;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -78,24 +80,33 @@ void serverSendBroadcast(char *buffer){
     }
 }
 
+void closeSocket(int position)
+{
+    pthread_mutex_lock(&mutex);
+    sockets[position] = -1;
+    pthread_mutex_unlock(&mutex);
+}
+
 void serverCloseBroadcast(char *buffer){
     int i;
     int sockfd;
     
-    for (i = 0; i < t_count; i++){
+    for (i = 0; i <= SIZE; i++){
         sockfd = sockets[i];
         
 		if (sockfd != -1){
             printf("\nKilling client %d\n", sockfd);	
             serverWrite(sockfd,buffer);
+            closeSocket(i);
 		}        
-    }
+    }    
+    
 }
 
 void closeAll()
 {   
-    char buffer[10];
-    strcpy(buffer,"bye");
+    char buffer[15];
+    strcpy(buffer,"server close");
     serverCloseBroadcast(buffer);
     free(threads);
 	free(sockets);
@@ -110,44 +121,33 @@ void serverRead(int sockfd,char buffer[])
     bzero(buffer,256);
     n = read(sockfd,buffer,255);
     if (n < 0) error("ERROR reading from socket");
-    serverSendBroadcast(buffer);
-    printf("%d sent: %s \n", sockfd, buffer);
+
+    if(memcmp(buffer,"bye",strlen("bye")) != 0)
+    {
+        char str[12];
+        sprintf(str, "%d", sockfd);
+        char newBuffer[255];
+        strcpy(newBuffer, str);
+        strcat(newBuffer," sent: ");
+        strcat(newBuffer, buffer);
+        serverSendBroadcast(newBuffer);
+    }
+    /* printf("%d sent: %s \n", sockfd, buffer); */
 }
 
 int findSocketToClose(int sockfd)
 {
     int i;
-    for (i = 0; i < 5; i++){
+    for (i = 0; i <= SIZE; i++){
     	if (sockets[i] == sockfd) {
     		return i;
     	}
-    }
-    
+    }    
 }
 
-void closeSocket(int position)
-{
-    pthread_mutex_lock(&mutex);
-    sockets[position] = -1;
-    pthread_mutex_unlock(&mutex);
-}
-
-void nomesinal(int sinal, char* str)
-{
-	switch(sinal)
-	{
-      	case 2:  
-            strcpy(str, "SIGINT");  
-            break;
-		case 15:  
-            strcpy(str, "SIGTERM"); 
-            break;
-	}
-}
-
-void tratasinal(int sinal)
+void treatSignal(int signal)
 { 
-    if(sinal==2 || sinal == 15){
+    if(signal==2 || signal == 15){
         closeAll();
     }
 }
@@ -158,12 +158,9 @@ void *serverListener(void *socket){
     int position, i;
     
     sockfd = *(int *)socket;
-    bzero(buffer,256);
+    bzero(buffer,256);    
     
-    signal(2, tratasinal);
-	signal(15, tratasinal);
-
-    while (memcmp(buffer,"bye",strlen("bye"))) {        
+    while (memcmp(buffer,"bye",strlen("bye")) != 0) {        
         serverRead(sockfd, buffer);        
     }
     
@@ -179,22 +176,22 @@ void *serverListener(void *socket){
 
 int getFirstEmpty()
 {
-	int first_empty,i;
-    first_empty = -1;
+	int empty,i;
+    empty = -1;
 		
     pthread_mutex_lock(&mutex);
-    for (i = 0; i < 5; i++){
+    for (i = 0; i <= SIZE; i++){
         if (sockets[i] == -1) {
-            first_empty = i;
+            empty = i;
             break;
         }
     }
     pthread_mutex_unlock(&mutex);
 
-    return first_empty;    
+    return empty;    
 }
 
-void serverAcceptClient(int sockfd,int first_empty)
+void serverAcceptClient(int sockfd,int empty)
 {
     int newsockfd, clilen;
     struct sockaddr_in serv_addr, cli_addr;
@@ -204,25 +201,25 @@ void serverAcceptClient(int sockfd,int first_empty)
     if (newsockfd < 0) 
         error("ERROR on accept");
     
-    pthread_create(&threads[first_empty], NULL, serverListener, &newsockfd);
-    sockets[first_empty] = newsockfd;
+    pthread_create(&threads[empty], NULL, serverListener, &newsockfd);
+    sockets[empty] = newsockfd;
 
     t_count++;
     printf("Connected: %d \n", t_count);
 }
 
 void *getClients(void *socket){
-	int first_empty, clilen, newsockfd, i, sockfd;
+	int empty, clilen, newsockfd, i, sockfd;
 	struct sockaddr_in cli_addr;
 	
 	sockfd = *(int *)socket;
 	
 	do {
 		listen(sockfd,5);		
-        first_empty = getFirstEmpty();
+        empty = getFirstEmpty();
 		
-		if (first_empty != -1){
-			serverAcceptClient(sockfd,first_empty);
+		if (empty != -1){
+			serverAcceptClient(sockfd,empty);
 		}
 		else printf("Server is full, try again later\n");
         
@@ -235,15 +232,15 @@ void *getClients(void *socket){
 void startSocketVector()
 {
     int i=0;
-    for (i = 0; i < 5; i++){
+    for (i = 0; i <= SIZE; i++){
 		sockets[i] = -1;
     }
 }
 
 void mallocs()
 {
-    threads = malloc(5 * sizeof(pthread_t));
-    sockets = malloc(5 * sizeof(int));
+    threads = malloc(SIZE * sizeof(pthread_t));
+    sockets = malloc(SIZE * sizeof(int));
 }
 
 int main(int argc, char *argv[])
@@ -261,6 +258,9 @@ int main(int argc, char *argv[])
     portno = atoi(argv[1]);
     serverBind(sockfd,portno);
     startSocketVector();	
+
+    signal(2, treatSignal);
+	signal(15, treatSignal);
 
     pthread_create(&main_thread, NULL, getClients, &sockfd);	
 	pthread_join(main_thread, NULL);

@@ -75,7 +75,6 @@ void clientRequireClose()
     pthread_cancel(listener);
     pthread_cancel(writer);
     close(serverSocket);
-
 }
 
 void clientRead(int sockfd,char buffer[])
@@ -84,23 +83,11 @@ void clientRead(int sockfd,char buffer[])
     bzero(buffer,256);
     n = read(sockfd,buffer,255);
     if (n < 0) error("ERROR reading from socket");
-    printf("Message received: %s\n",buffer);
+    /* printf("Message received: %s\n",buffer); */
+    printf("%s\n",buffer);
 }
 
-void nomesinal(int sinal, char* str)
-{
-	switch(sinal)
-	{
-		case 2:  
-            strcpy(str, "SIGINT");  
-            break;
-		case 15:  
-            strcpy(str, "SIGTERM"); 
-            break;
-	}
-}
-
-void tratasinal(int sinal)
+void treatSignal(int sinal)
 {
 	if(sinal==2 || sinal==15){
         clientRequireClose();
@@ -114,11 +101,12 @@ void *clientListener(void *socket){
     sockfd = *(int *)socket;
     
     bzero(buffer,256);    
-    while (memcmp(buffer,"bye",strlen("bye")) != 0) {
+    while (memcmp(buffer,"server close",strlen("server bye")) != 0) {
         clientRead(sockfd,buffer);
     }
     
     pthread_cancel(writer);
+    pthread_cancel(listener);
     return NULL;
 }
 
@@ -126,21 +114,20 @@ void *clientWriter(void *socket){
     char buffer[256];
     int sockfd, n;
 
-    signal(2, tratasinal);
-	signal(15, tratasinal);
+    signal(2, treatSignal);
+	signal(15, treatSignal);
     
     sockfd = *(int *)socket;
     bzero(buffer,256);
     
-    while (memcmp(buffer,"bye",strlen("bye")) != 0) {
+    while (memcmp(buffer,"bye",strlen("bye")) != 0 && memcmp(buffer,"server close",strlen("server bye")) != 0) {
         clientWrite(sockfd,buffer);
     }
-    
+
+    pthread_cancel(writer);    
     pthread_cancel(listener);
     return NULL;
 }
-
-
 
 int main(int argc, char *argv[])
 {
