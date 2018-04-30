@@ -1,2 +1,3 @@
 # Sockets-Client-Server
-Atividade inicial trabalhando com sockets 
+Trabalho de sockets envolvendo multi threads e sinais. 
+
