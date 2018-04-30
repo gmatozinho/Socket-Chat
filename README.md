@@ -1,3 +1,4 @@
 # Sockets-Client-Server
-Trabalho de sockets envolvendo multi threads e sinais. 
+
+Socket work involving multi threads and signals. 
 
