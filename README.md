@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/gmatozinho/Sockets-Client-Server.svg?branch=master)](https://travis-ci.org/gmatozinho/Sockets-Client-Server)
+[![Build Status](https://travis-ci.com/gmatozinho/TpaActivities.svg?token=EY3ZctsLhnvSfrFoyB2D&branch=master)](https://travis-ci.com/gmatozinho/TpaActivities)
 
 # Sockets-Client-Server
 
