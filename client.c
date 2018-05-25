@@ -101,7 +101,7 @@ void treatSignal(int sinal)
 
 void *clientListener(void *socket){
     char buffer[256];
-    int sockfd, n;    
+    int sockfd;    
 
     sockfd = *(int *)socket;
     
@@ -117,7 +117,7 @@ void *clientListener(void *socket){
 
 void *clientWriter(void *socket){
     char buffer[256];
-    int sockfd, n;
+    int sockfd;
 
     signal(2, treatSignal);
 	signal(15, treatSignal);
@@ -136,8 +136,7 @@ void *clientWriter(void *socket){
 
 int main(int argc, char *argv[])
 {
-    int sockfd, portno, n;
-    char buffer[256];
+    int sockfd, portno;
 
     init(argc,argv);
     

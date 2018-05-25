@@ -1,13 +1,13 @@
 CC=gcc 
-CFLAGS=-Wall -ansi
+CFLAGS=-Wall -ansi 
 
 all:	server	client
 
 server:	server.c
-	gcc -o server server.c -lpthread -ansi
+	${CC} ${CFLAGS} -o server server.c -lpthread 
 
 client:	client.c
-	gcc -o client client.c -lpthread -ansi
+	${CC} ${CFLAGS} -o client client.c -lpthread
 
 clean:	cleanServer	cleanClient 
 

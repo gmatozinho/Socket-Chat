@@ -144,7 +144,9 @@ int findSocketToClose(int sockfd)
     	if (sockets[i] == sockfd) {
     		return i;
     	}
-    }    
+    }   
+
+    return -1; 
 }
 
 void treatSignal(int signal)
@@ -156,8 +158,8 @@ void treatSignal(int signal)
 
 void *serverListener(void *socket){
     char buffer[256];
-    int sockfd, n;
-    int position, i;
+    int sockfd;
+    int position;
     
     sockfd = *(int *)socket;
     bzero(buffer,256);    
@@ -196,7 +198,7 @@ int getFirstEmpty()
 void serverAcceptClient(int sockfd,int empty)
 {
     int newsockfd, clilen;
-    struct sockaddr_in serv_addr, cli_addr;
+    struct sockaddr_in cli_addr;
 
     clilen = sizeof(cli_addr);
     newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
@@ -211,9 +213,8 @@ void serverAcceptClient(int sockfd,int empty)
 }
 
 void *getClients(void *socket){
-	int empty, clilen, newsockfd, i, sockfd;
-	struct sockaddr_in cli_addr;
-	
+	int empty, sockfd;
+		
 	sockfd = *(int *)socket;
 	
 	do {
@@ -247,12 +248,8 @@ void mallocs()
 
 int main(int argc, char *argv[])
 {
-    int sockfd, newsockfd1,newsockfd2, portno;
-    char buffer[256];
-    struct sockaddr_in serv_addr, cli_addr;
-    int n;
-    int i;
-
+    int sockfd, portno;
+        
     mallocs();
     checkPort(argc);
     sockfd = serverAssignSocket();
