@@ -1,5 +1,6 @@
 /* A simple client in the internet domain using localhost server
-    and sending and receiving messages asynchronously   
+    and sending and receiving messages asynchronously 
+    The port number and localhost is passed as an argument    
 */
 
 #include <stdio.h>

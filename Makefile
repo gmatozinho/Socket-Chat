@@ -11,9 +11,12 @@ client:	client.c
 
 clean:	cleanServer	cleanClient 
 
+runserver:
+	./server 10000
+
 runclient:
 	./client localhost 10000
-	
+
 cleanServer :
 	rm -f server
 
