@@ -21,7 +21,9 @@
             "macFrameworkPath": [
                 "/System/Library/Frameworks",
                 "/Library/Frameworks"
-            ]
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
             "name": "Linux",
@@ -40,7 +42,9 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
             "name": "Linux1",
@@ -92,7 +96,9 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
             "name": "WSL",
@@ -124,7 +130,9 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
             "name": "WSL (Beta)",
@@ -156,39 +164,41 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         },
         {
-            
-                    "name": "Win32",
-                    "intelliSenseMode": "clang-x64",
-                    "includePath": [
-                        "${workspaceRoot}",
-                        "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++",
-                        "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32",
-                        "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/backward",
-                        "C:/MinGW/lib/gcc/mingw32/6.3.0/include",
-                        "C:/MinGW/include",
-                        "C:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed"
-                    ],
-                    "defines": [
-                        "_DEBUG",
-                        "UNICODE",
-                        "__GNUC__=6",
-                        "__cdecl=__attribute__((__cdecl__))"
-                    ],
-                    "browse": {
-                        "path": [
-                            "C:/MinGW/lib/gcc/mingw32/6.3.0/include",
-                            "C:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed",
-                            "C:/MinGW/include/*"
-                        ],
-                        "limitSymbolsToIncludedHeaders": true,
-                        "databaseFilename": ""
-                    }
-                
+            "name": "Win32",
+            "intelliSenseMode": "clang-x64",
+            "includePath": [
+                "${workspaceRoot}",
+                "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++",
+                "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32",
+                "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/backward",
+                "C:/MinGW/lib/gcc/mingw32/6.3.0/include",
+                "C:/MinGW/include",
+                "C:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "__GNUC__=6",
+                "__cdecl=__attribute__((__cdecl__))"
+            ],
+            "browse": {
+                "path": [
+                    "C:/MinGW/lib/gcc/mingw32/6.3.0/include",
+                    "C:/MinGW/lib/gcc/mingw32/6.3.0/include-fixed",
+                    "C:/MinGW/include/*"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         }
     ],
     "intelliSenseMode": "msvc-x64",
-    "version": 3
+    "version": 4
 }

@@ -1,5 +1,8 @@
 /* A simple server in the internet domain using TCP
-   The port number is passed as an argument */
+   The port number is passed as an argument 
+    and management exchange of messages between clients 
+    Accepts up to 5 clients   
+*/
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h> 

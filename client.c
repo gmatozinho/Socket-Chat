@@ -1,3 +1,7 @@
+/* A simple client in the internet domain using localhost server
+    and sending and receiving messages asynchronously   
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>

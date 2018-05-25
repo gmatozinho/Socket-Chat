@@ -13,6 +13,7 @@ clean:	cleanServer	cleanClient
 
 runclient:
 	./client localhost 10000
+	
 cleanServer :
 	rm -f server
 
